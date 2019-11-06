@@ -1,6 +1,7 @@
 #ifndef SINGLEINSTALLPAGE_H
 #define SINGLEINSTALLPAGE_H
 
+#include <QLabel>
 #include <QWidget>
 
 class SingleInstallPage : public QWidget
@@ -9,9 +10,11 @@ class SingleInstallPage : public QWidget
 public:
     explicit SingleInstallPage(QWidget *parent = nullptr);
 
-signals:
-
-public slots:
+private:
+    QLabel *m_packageIcon;
+    QLabel *m_packageName;
+    QLabel *m_packageVersion;
+    QLabel *m_packageDescription;
 };
 
 #endif // SINGLEINSTALLPAGE_H

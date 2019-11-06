@@ -2,6 +2,7 @@
 #include "debinstallworker.h"
 #include "deblistmodel.h"
 #include "debpackage.h"
+#include "singleinstallpage.h"
 
 #include <QtGui>
 #include <QCoreApplication>
@@ -46,4 +47,7 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
 
         m_fileListModel->appendPackage(p);
     }
+
+    m_centralLayout->addWidget(new SingleInstallPage);
+    m_centralLayout->setCurrentIndex(1);
 }
