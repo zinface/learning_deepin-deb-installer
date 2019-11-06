@@ -1,5 +1,6 @@
 #include "debinstaller.h"
 #include "debpackage.h"
+#include "singleinstallpage.h"
 
 #include <QtGui>
 #include <QCoreApplication>
@@ -42,4 +43,7 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
 
         m_preparedPackages.append(p);
     }
+
+    m_centralLayout->addWidget(new SingleInstallPage);
+    m_centralLayout->setCurrentIndex(1);
 }

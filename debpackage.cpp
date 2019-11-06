@@ -13,7 +13,7 @@ DebPackage::DebPackage(const QString &filePath, QObject *parent)
 
     connect(proc, static_cast<void (QProcess::*)(int)>(&QProcess::finished),this,&DebPackage::onProcFinishied);
 
-    proc->start("dpkg-deb", QStringList() << "-l" << m_filePath);
+    proc->start("dpkg-deb", QStringList() << "-I" << m_filePath);
 }
 
 void DebPackage::onProcFinishied()
@@ -30,10 +30,10 @@ void DebPackage::onProcFinishied()
     m_package = package.match(output).captured(1).trimmed();
 
     const QRegularExpression version("^ Version:(.*)$", QRegularExpression::MultilineOption);
-    m_version = package.match(output).captured(1).trimmed();
+    m_version = version.match(output).captured(1).trimmed();
 
     const QRegularExpression description("^ Description:(.*)$", QRegularExpression::MultilineOption);
-    m_description = package.match(output).captured(1).trimmed();
+    m_description = description.match(output).captured(1).trimmed();
 
     qDebug() << m_package;
     qDebug() << m_version;
