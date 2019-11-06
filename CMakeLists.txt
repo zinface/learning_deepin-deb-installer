@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.9)
 
-project(mdm_installer)
+project(mdm_deb_installer)
 
 # Find includes in corrsponding build directories
 #set(CMAKE_VERBOSE_MAKEFILE ON)
@@ -12,9 +12,9 @@ set(CMAKE_AUTORCC ON)
 #set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_FLAGS -Wall)
 
-if(NOT (${CMAKE_BUILD_TYPE} MATCHES "Debug"))
-    set(CMAKE_CXX_FLAGS -03)
-endif()
+#if(NOT (${CMAKE_BUILD_TYPE} MATCHES "Debug"))
+#    set(CMAKE_CXX_FLAGS -j5)
+#endif()
 
 # sources file
 file(GLOB SOURCES "*.h" "*.cpp")

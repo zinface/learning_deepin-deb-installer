@@ -5,6 +5,9 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+    a.setOrganizationName("deepin");
+    a.setApplicationName("MDM_INSTALLER");
+    a.setApplicationVersion("1.0");
 
     DebInstaller w;
 
