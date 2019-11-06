@@ -5,7 +5,7 @@
 #include <QStackedLayout>
 #include "filechoosewidget.h"
 
-class DebPackage;
+
 class FileChooseWidget;
 class DebInstallWorker;
 class DebListModel;

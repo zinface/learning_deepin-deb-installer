@@ -23,6 +23,7 @@ file(GLOB SOURCES "*.h" "*.cpp")
 #find_package(Qt5Widgets)
 find_package(PkgConfig REQUIRED)
 find_package(Qt5Widgets REQUIRED)
+find_package(QApt REQUIRED)
 
 pkg_check_modules(DtkCore REQUIRED dtkcore)
 pkg_check_modules(DtkWidget REQUIRED dtkwidget)
@@ -30,5 +31,5 @@ pkg_check_modules(DtkWidget REQUIRED dtkwidget)
 # Tell CMake to create the executable
 add_executable(${PROJECT_NAME} ${SOURCES} resources/resources.qrc)
 
-target_include_directories(${PROJECT_NAME} PUBLIC ${DtkCore_INCLUDE_DIRS} ${DtkWidget_INCLUDE_DIRS})
-target_link_libraries(${PROJECT_NAME} Qt5::Widgets ${DtkCore_LIBRARIES} ${DtkWidget_LIBRARIES})
+target_include_directories(${PROJECT_NAME} PUBLIC /usr/include/QApt ${DtkCore_INCLUDE_DIRS} ${DtkWidget_INCLUDE_DIRS})
+target_link_libraries(${PROJECT_NAME} ${DtkCore_LIBRARIES} ${DtkWidget_LIBRARIES} ${Qt5Widgets_LIBRARIES} QApt)
