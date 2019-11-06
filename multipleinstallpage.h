@@ -1,17 +1,21 @@
 #ifndef MULTIPLEINSTALLPAGE_H
 #define MULTIPLEINSTALLPAGE_H
 
-#include <QListView>
+#include <QWidget>
+#include <QPushButton>
 
-class MultipleInstallPage : public QListView
+class PackageListView;
+class QAbstractListModel;
+class MultipleInstallPage : public QWidget
 {
     Q_OBJECT
 public:
-    explicit MultipleInstallPage(QWidget *parent = nullptr);
+    explicit MultipleInstallPage(QAbstractListModel *model, QWidget *parent = nullptr);
 
-signals:
 
-public slots:
+private:
+    PackageListView *m_appsView;
+    QPushButton *m_installButton;
 };
 
 #endif // MULTIPLEINSTALLPAGE_H
