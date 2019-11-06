@@ -15,7 +15,7 @@ using QApt::DebFile;
 DWIDGET_USE_NAMESPACE
 
 DebInstaller::DebInstaller(QWidget *parent)
-    : DMainWindow(parent),
+    : QWidget(parent),
       m_centralLayout(new QStackedLayout),
       m_fileChooseWidget(new FileChooseWidget),
       m_installWorker(new DebInstallWorker(this)),

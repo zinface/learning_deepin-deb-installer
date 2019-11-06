@@ -33,3 +33,12 @@ add_executable(${PROJECT_NAME} ${SOURCES} resources/resources.qrc)
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${DtkCore_INCLUDE_DIRS} ${DtkWidget_INCLUDE_DIRS})
 target_link_libraries(${PROJECT_NAME} ${DtkCore_LIBRARIES} ${DtkWidget_LIBRARIES} ${Qt5Widgets_LIBRARIES} QApt)
+
+
+# install settings
+if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+    set(CMAKE_INSTALL_PREFIX /usr)
+endif()
+
+install(TARGETS ${PROJECT_NAME} DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
+install(FILES mdm_deb_installer.desktop DESTINATION ${CMAKE_INSTALL_PREFIX}/share/applications)

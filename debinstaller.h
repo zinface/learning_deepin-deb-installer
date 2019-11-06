@@ -11,7 +11,7 @@ class FileChooseWidget;
 class DebInstallWorker;
 class DebListModel;
 
-class DebInstaller : public Dtk::Widget::DMainWindow
+class DebInstaller : public QWidget
 {
     Q_OBJECT
 public:

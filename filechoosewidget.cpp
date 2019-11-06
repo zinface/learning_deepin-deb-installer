@@ -26,7 +26,7 @@ FileChooseWidget::FileChooseWidget(QWidget *parent)
 
     QVBoxLayout *centerWrapLayout = new QVBoxLayout;
     centerWrapLayout->addWidget(iconImage);
-    centerWrapLayout->setAlignment(iconImage, Qt::AlignTop | Qt::AlignLeft);
+    centerWrapLayout->setAlignment(iconImage, Qt::AlignTop | Qt::AlignHCenter);
     centerWrapLayout->addSpacing(20);
     centerWrapLayout->addWidget(dndTips);
     centerWrapLayout->setSpacing(0);
