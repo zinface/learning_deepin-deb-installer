@@ -2,6 +2,7 @@
 #include "debinstallworker.h"
 #include "deblistmodel.h"
 #include "singleinstallpage.h"
+#include "multipleinstallpage.h"
 
 #include <QtGui>
 #include <QCoreApplication>
@@ -66,9 +67,20 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
     if(packageCount == 0)
         return;
 
-    SingleInstallPage *singlePage = new  SingleInstallPage;
-    singlePage->setPackage(m_fileListModel->preparedPackages().first());
+    if (packageCount == 1) {
+        // single package install
+        SingleInstallPage *singlePage = new  SingleInstallPage;
+        singlePage->setPackage(m_fileListModel->preparedPackages().first());
 
-    m_centralLayout->addWidget(singlePage);
+        m_centralLayout->addWidget(singlePage);
+    } else {
+        // multiple package installA
+        MultipleInstallPage *multiplePage = new MultipleInstallPage;
+        multiplePage->setModel(m_fileListModel);
+
+        m_centralLayout->addWidget(multiplePage);
+    }
+
+    // switch to new page
     m_centralLayout->setCurrentIndex(1);
 }
