@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QDragEnterEvent>
 #include <QDropEvent>
+#include <QPushButton>
 
 class FileChooseWidget : public QWidget
 {
@@ -21,9 +22,12 @@ protected:
     void dropEvent(QDropEvent *e);
     void paintEvent(QPaintEvent *event);
 
+private slots:
+    void chooseFiles();
+
 private:
     QPixmap m_bgImage;
-
+    QPushButton *m_fileChooseBtn;
 };
 
 #endif // FILECHOOSEWIDGET_H
