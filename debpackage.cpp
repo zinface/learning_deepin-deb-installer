@@ -1,7 +1,41 @@
 #include "debpackage.h"
 
-DebPackage::DebPackage(QObject *parent)
-    : QObject(parent)
-{
+#include <QProcess>
+#include <QtDebug>
+#include <QRegularExpression>
 
+DebPackage::DebPackage(const QString &filePath, QObject *parent)
+    : QObject(parent),
+      m_filePath(filePath)
+{
+    // get package info
+    QProcess *proc = new QProcess;
+
+    connect(proc, static_cast<void (QProcess::*)(int)>(&QProcess::finished),this,&DebPackage::onProcFinishied);
+
+    proc->start("dpkg-deb", QStringList() << "-l" << m_filePath);
+}
+
+void DebPackage::onProcFinishied()
+{
+    QProcess *proc = dynamic_cast<QProcess *>(sender());
+    Q_ASSERT(proc);
+
+    const QString output = proc->readAllStandardOutput();
+    proc->deleteLater();
+
+    qDebug().noquote() << output;
+
+    const QRegularExpression package("^ Package:(.*)$",QRegularExpression::MultilineOption);
+    m_package = package.match(output).captured(1).trimmed();
+
+    const QRegularExpression version("^ Version:(.*)$", QRegularExpression::MultilineOption);
+    m_version = package.match(output).captured(1).trimmed();
+
+    const QRegularExpression description("^ Description:(.*)$", QRegularExpression::MultilineOption);
+    m_description = package.match(output).captured(1).trimmed();
+
+    qDebug() << m_package;
+    qDebug() << m_version;
+    qDebug() << m_description;
 }
