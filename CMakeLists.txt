@@ -31,5 +31,10 @@ pkg_check_modules(DtkWidget REQUIRED dtkwidget)
 # Tell CMake to create the executable
 add_executable(${PROJECT_NAME} ${SOURCES} resources/resources.qrc)
 
-target_include_directories(${PROJECT_NAME} PUBLIC /usr/include/QApt ${DtkCore_INCLUDE_DIRS} ${DtkWidget_INCLUDE_DIRS})
-target_link_libraries(${PROJECT_NAME} ${DtkCore_LIBRARIES} ${DtkWidget_LIBRARIES} ${Qt5Widgets_LIBRARIES} QApt)
+target_include_directories(${PROJECT_NAME} PUBLIC ${DtkCore_INCLUDE_DIRS} ${DtkWidget_INCLUDE_DIRS} ${QApt_INCLUDE_DIRS})
+target_link_libraries(${PROJECT_NAME} ${DtkCore_LIBRARIES} ${DtkWidget_LIBRARIES} ${Qt5Widgets_LIBRARIES} ${QApt_LIBRARIES})
+
+
+if(${QApt_FOUND})
+    message(STATUS "*****QApt_FOUND: " "yes")
+endif()

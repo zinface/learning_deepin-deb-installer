@@ -3,8 +3,7 @@
 
 #include <QAbstractListModel>
 #include <QObject>
-
-#include <DebFile>
+#include <QApt/DebFile>
 
 class DebListModel : public QAbstractListModel
 {
@@ -23,10 +22,10 @@ public:
     };
 
     // QAbstractItemModel interface
-    int rowCount(const QModelIndex &parent) const;
-    QVariant data(const QModelIndex &index, int role) const;
+    int rowCount(const QModelIndex &parent) const override;
+    QVariant data(const QModelIndex &index, int role) const override;
 
-    const QList<QApt::DebFile *> preparedPackages() const {return m_preparedPackages;}
+    const QList<QApt::DebFile *> preparedPackages() const { return m_preparedPackages; }
 
 public slots:
     void appendPackage(QApt::DebFile *package);

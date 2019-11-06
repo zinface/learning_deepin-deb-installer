@@ -1,6 +1,6 @@
 #include "deblistmodel.h"
 
-#include <DebFile>
+#include <QApt/DebFile>
 
 using QApt::DebFile;
 

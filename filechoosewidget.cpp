@@ -10,18 +10,21 @@
 #include <QVBoxLayout>
 #include <QFileDialog>
 
+DWIDGET_USE_NAMESPACE
+
 FileChooseWidget::FileChooseWidget(QWidget *parent)
     : QWidget(parent),
       m_bgImage(QPixmap(":/images/img.jpg"))
 {
-    m_fileChooseBtn = new QPushButton;
+    m_fileChooseBtn = new DLinkButton;
     m_fileChooseBtn->setText("Choose Package");
 
     QVBoxLayout *centralLayout = new QVBoxLayout;
     centralLayout->addStretch();
     centralLayout->addWidget(m_fileChooseBtn);
     centralLayout->setAlignment(m_fileChooseBtn, Qt::AlignCenter);
-    centralLayout->setContentsMargins(0,0,0,0);
+    centralLayout->setSpacing(0);
+    centralLayout->setContentsMargins(0, 0, 0, 20);
 
     setLayout(centralLayout);
     setAcceptDrops(true);

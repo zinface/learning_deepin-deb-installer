@@ -1,16 +1,17 @@
 #ifndef DEBINSTALLER_H
 #define DEBINSTALLER_H
 
-#include <QWidget>
+
 #include <QStackedLayout>
 #include "filechoosewidget.h"
 
+#include <DMainWindow>
 
 class FileChooseWidget;
 class DebInstallWorker;
 class DebListModel;
 
-class DebInstaller : public QWidget
+class DebInstaller : public Dtk::Widget::DMainWindow
 {
     Q_OBJECT
 public:

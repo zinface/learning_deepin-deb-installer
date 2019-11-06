@@ -8,12 +8,12 @@
 #include <QGuiApplication>
 #include <QScreen>
 
-#include <DebFile>
+#include <QApt/DebFile>
 
 using QApt::DebFile;
 
 DebInstaller::DebInstaller(QWidget *parent)
-    : QWidget(parent),
+    : DMainWindow(parent),
       m_centralLayout(new QStackedLayout),
       m_fileChooseWidget(new FileChooseWidget),
       m_installWorker(new DebInstallWorker(this)),
@@ -22,7 +22,8 @@ DebInstaller::DebInstaller(QWidget *parent)
     m_centralLayout->addWidget(m_fileChooseWidget);
     setLayout(m_centralLayout);
     setFixedSize(480, 380);
-    move(qApp->primaryScreen()->geometry().center() - rect().center());
+    setWindowTitle("MDM Deb Installer");
+    move(qApp->primaryScreen()->geometry().center() - geometry().center());
 
     connect(m_fileChooseWidget, &FileChooseWidget::packagesSelected, this, &DebInstaller::onPackagesSelected);
 }
