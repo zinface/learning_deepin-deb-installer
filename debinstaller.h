@@ -7,7 +7,8 @@
 
 class DebPackage;
 class FileChooseWidget;
-
+class DebInstallWorker;
+class DebListModel;
 
 class DebInstaller : public QWidget
 {
@@ -27,7 +28,9 @@ private:
     QStackedLayout *m_centralLayout;
     FileChooseWidget *m_fileChooseWidget;
 
-    QList<DebPackage *> m_preparedPackages;
+//    QList<DebPackage *> m_preparedPackages;
+    DebInstallWorker *m_installWorker;
+    DebListModel *m_fileListModel;
 };
 
 #endif // DEBINSTALLER_H

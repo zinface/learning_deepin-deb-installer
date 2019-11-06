@@ -1,4 +1,6 @@
 #include "debinstaller.h"
+#include "debinstallworker.h"
+#include "deblistmodel.h"
 #include "debpackage.h"
 
 #include <QtGui>
@@ -9,7 +11,9 @@
 DebInstaller::DebInstaller(QWidget *parent)
     : QWidget(parent),
       m_centralLayout(new QStackedLayout),
-      m_fileChooseWidget(new FileChooseWidget)
+      m_fileChooseWidget(new FileChooseWidget),
+      m_installWorker(new DebInstallWorker(this)),
+      m_fileListModel(new DebListModel(this))
 {
     m_centralLayout->addWidget(m_fileChooseWidget);
     setLayout(m_centralLayout);
@@ -21,7 +25,7 @@ DebInstaller::DebInstaller(QWidget *parent)
 
 DebInstaller::~DebInstaller()
 {
-    qDeleteAll(m_preparedPackages);
+
 }
 
 void DebInstaller::keyPressEvent(QKeyEvent *event)
@@ -34,12 +38,12 @@ void DebInstaller::keyPressEvent(QKeyEvent *event)
 
 void DebInstaller::onPackagesSelected(const QStringList &packages)
 {
-    Q_ASSERT(m_preparedPackages.isEmpty());
+    Q_ASSERT(m_fileListModel->preparedPackages().isEmpty());
 
     for (const auto &package : packages)
     {
         DebPackage *p = new DebPackage(package);
 
-        m_preparedPackages.append(p);
+        m_fileListModel->appendPackage(p);
     }
 }
