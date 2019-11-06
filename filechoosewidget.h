@@ -11,9 +11,14 @@ class FileChooseWidget : public QWidget
 public:
     explicit FileChooseWidget(QWidget *parent = nullptr);
 
+    // QWidget interface
 protected:
     void dragEnterEvent(QDragEnterEvent *e);
     void dropEvent(QDropEvent *e);
+    void paintEvent(QPaintEvent *event);
+
+private:
+    QPixmap m_bgImage;
 
 };
 
