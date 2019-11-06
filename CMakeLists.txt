@@ -32,4 +32,4 @@ pkg_check_modules(DtkWidget REQUIRED dtkwidget)
 add_executable(${PROJECT_NAME} ${SOURCES} resources/resources.qrc)
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${DtkCore_INCLUDE_DIRS} ${DtkWidget_INCLUDE_DIRS})
-target_link_libraries(${PROJECT_NAME} ${DtkCore_LIBRARIES} ${DtkWidget_LIBRARIES} ${Qt5Widgets_LIBRARIES} ${QApt_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} ${DtkCore_LIBRARIES} ${DtkWidget_LIBRARIES} ${Qt5Widgets_LIBRARIES} QApt)
