@@ -1,6 +1,9 @@
 #include "debinstaller.h"
 
 #include <QtGui>
+#include <QCoreApplication>
+#include <QGuiApplication>
+#include <QScreen>
 
 DebInstaller::DebInstaller(QWidget *parent)
     : QWidget(parent),
@@ -10,6 +13,7 @@ DebInstaller::DebInstaller(QWidget *parent)
     m_centralLayout->addWidget(m_fileChooseWidget);
     setLayout(m_centralLayout);
     resize(800, 600);
+    move(qApp->primaryScreen()->geometry().center() - rect().center());
 }
 
 DebInstaller::~DebInstaller()
