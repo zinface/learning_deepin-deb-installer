@@ -1,0 +1,112 @@
+该项目于【2019年11月6号】创建，开发时使用的【Dtk版本】及方式与【原项目】不一样
+该README仅作为开发过程中个人心得记开发记录使用
+README文件从【第16个提交】后一直存在
+.gitignore 在【第6个提交】后一直存在
+源项目Qt配置pro于【第2个提交】后转换为CMakeLists.txt
+
+重要心得：
+由于该项目是本人从github上拉取的开源项目，并对其进行学习而成。
+整个学习过程是由从原项目第一个提交进行学习，了解开发过程，从而快速开发出第一个可用软件。
+产生的必然结果是快速了解软件开发及提高开源项目的理解，还有git项目管理的重要作用。
+因学习过程中使用gitkraken查看提交差异和文件变化，是一个很好的git管理及按步学习工具。
+
+
+
+开发过程记录：
+第一个提交的时候：
+    因之前对CMake做过大量学习及了解，Qt程序预创建没有任何问题。
+    原项目是先创建的Qt项目配置文件pro，而该项目内完全不使用任何Qt项目的配置
+    创建了:
+        CMakeLists.txt 项目构建及规范管理配置文件
+        main.cpp 主程序入口文件
+        debinstaller.h/cpp 作为程序的载体主界面文件
+        filechoosewidget.h/cpp 唯一一个可支持拖进文件的控件，实现文件名检测逻辑
+
+第二个提交的时候：
+    因原作者添加了背景图，是一张 lim 包子=馒头，馅=0。
+    该背景图为 filechoosewidget.cpp 内饰背景图
+    【原项目从Qt(pro配置)转变成CMakeLists.txt配置】
+    改动了:
+        filechoosewidget.h/cpp 添加了背景图及重写了paintEvent方法
+        CMakeLists.txt 修改了一些基本配置，及修改添加源目录文件的操作
+
+    创建了：
+        debpackage.h/cpp 该提交仅创建了该类，基本上是很好是一个提交，细节清晰
+        resources/images/img.jpg 背景图
+        resources/resources.qrc   Qt 资源文件配置
+
+第三个提交的时候：
+    修改了一些配置项，对于 CMakeLists.txt 来说这个问题是无解。
+    在这里的一个signals当时并不知道有什么用，但之后的几个提交内有重要作用
+    改动了：
+        debinstaller.cpp 为该界面进行初始化时显示到屏幕中心
+        filechoosewidget.h/cpp 对文件检测逻辑进行优化，创建了一个signals触发选择的方法。
+
+
+第四个提交的时候：
+    这里使用了触发机制的槽信号是一个跨源文件的一个绑定，是个令人摸不着头脑的开始。
+    但很快，并对这个逻辑有了初步的了解。这是个有趣的项目，所做事情明确，提交合理正确。
+    使用命令dpkg-deb解析deb文件,截取标准输出结果及打印。为了验证前面所做的功能。
+    改动了：
+        debinstaller.h/cpp 绑定了上一个提交的信号并对槽创建了一个slots类型的触发事件
+                           该slots事件方法仅对接收到的软件包信息进行创建DebPackage对像
+                           信息是QStringList(单或多个软件包的路径)，依次保存到
+                           QList<DebPackage *> m_preparedPackages 集合(有趣)
+        debpackage.h/cpp  添加了部分实现逻辑，首先是构造的解析过程，和自身提供了QProcess
+                          的一个信号槽触发方法，这个connent写法看不懂警告！！！
+                          该触发是等待逻辑解析过程，对命令行的标准输出进行处理，并使用了
+                          正则表达式对输出进行截取。然后就是打印。
+
+    创建了：
+        singleinstallpage.h/cpp 仅添加了该类，还未实现单面安装界面的逻辑。
+
+第五个提交的时候：
+    这里我对第四个提交的时候出现的错误进行了调整，因开发时的问题，并没有太过认真检测而遗留。
+
+    改动了：
+        filechoosewidget.h/cpp 添加了一个QPushButton按钮，并添加一个槽事件进行绑定。
+                               按钮是Choose Package，触发的槽方法为chooseFiles()，
+                               方法内就是打开一个选择文件对话框的过程，使用了一个Qt提供
+                               的QFileDialog类完成功能点。确定文件后也是触发一个信号。
+
+        debpackage.cpp 修正低级错误问题。
+
+第六个提交的时候：
+    对本地git仓库管理时出现build目录也被提交，我立即撤销提交，并在可以保存修改文件时操作
+    git reset <上一个commit>  即返回上一个提交且不撤销当前更改。
+    在这个时候前已经创建了一个.gitignore，因在【第7个提交】是切换分支到【第4个提交】时的commit
+    合并分支前在【第4个提交】时起始并没有.gitignore。
+
+    改动了：
+        debinstaller.h/cpp 增加了一些成员变量，并在构造时初始化。新添加的类进行包信息管理
+                           删除 QList<DebPackage *> m_preparedPackages 成员。
+                           改变为 deblistmodel.h/cpp 提供的接口添加数据进(私有)集合变量。
+        debpackage.h  增加了取出包信息的方法。为之后的提交做铺垫；
+
+    创建了：
+        deblistmodel.h/cpp 该类为软件包信息数据模型类，继承于QAbstractListModel，并实现
+                           rowCount,data 两个虚方法。通常情况这两个方法必须实现。顶替了
+                           debinstaller.h/cpp下的 QList<DebPackage *> m_preparedPackages 集合，
+                           重点在于包信息数据的处理。
+        debinstallworker.h/cpp 该提交仅创建了该类，预为下一步做铺垫。
+
+第七个提交的时候：
+    本提交是切换到【第4个提交】时的commit
+    因在【第5个提交】时修复了一些代码上的低级错误，所以这个提交是验证错误修复后的的提交
+    在完成本次修改后，可正常在控制台输出Deb包的解析逻辑信息，正常打印。
+
+    在【第4个提交】的基础上改动了：
+        debinstaller.cpp 直接在原基础上进行新一步操作，对拖入的包可预显示一个新界面。
+        debpackage.cpp 重复了【第5个提交】的修正低级错误问题。
+        singleinstallpage.h/cpp 在原基础上的单页安装界面仅添加了小部分控件(包信息)成员
+
+
+第八个提交的时候：
+    本次提交为合并【第6(master)、7(HEAD)提交】因分支不同，提交不同而进行合并
+    以【第7个提交】为参考：
+        合并了debinstall.cpp
+        合并了singleinstall.h/cpp
+        debpackage.cpp 因重复修改相同，提交时提交冲突，仅先将冲突部分删除再重新提交。
+
+第九个提交的时候：
+    做了重大变更。
