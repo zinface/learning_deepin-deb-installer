@@ -23,6 +23,7 @@ file(GLOB SOURCES "*.h" "*.cpp")
 #find_package(Qt5Widgets)
 find_package(PkgConfig REQUIRED)
 find_package(Qt5Widgets REQUIRED)
+find_package(Qt5Concurrent REQUIRED)
 find_package(QApt REQUIRED)
 
 pkg_check_modules(DtkCore REQUIRED dtkcore)
@@ -32,7 +33,13 @@ pkg_check_modules(DtkWidget REQUIRED dtkwidget)
 add_executable(${PROJECT_NAME} ${SOURCES} resources/resources.qrc)
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${DtkCore_INCLUDE_DIRS} ${DtkWidget_INCLUDE_DIRS})
-target_link_libraries(${PROJECT_NAME} ${DtkCore_LIBRARIES} ${DtkWidget_LIBRARIES} ${Qt5Widgets_LIBRARIES} QApt)
+target_link_libraries(${PROJECT_NAME}
+    QApt
+    ${DtkCore_LIBRARIES}
+    ${DtkWidget_LIBRARIES}
+    ${Qt5Widgets_LIBRARIES}
+    ${Qt5Concurrent_LIBRARIES}
+)
 
 
 # install settings

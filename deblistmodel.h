@@ -2,7 +2,8 @@
 #define DEBLISTMODEL_H
 
 #include <QAbstractListModel>
-#include <QObject>
+#include <QFuture>
+
 #include <QApt/DebFile>
 #include <QApt/Backend>
 
@@ -10,7 +11,7 @@ class DebListModel : public QAbstractListModel
 {
     Q_OBJECT
 public:
-    explicit DebListModel(QObject *parent = nullptr);
+    explicit DebListModel(QObject *parent = 0);
     ~DebListModel();
 
     enum PackageRole
@@ -32,9 +33,8 @@ public slots:
     void appendPackage(QApt::DebFile *package);
 
 private:
+    QFuture<QApt::Backend *> m_backendFuture;
     QList<QApt::DebFile *> m_preparedPackages;
-    QApt::Backend *m_aptBackend;
-
 
 };
 
