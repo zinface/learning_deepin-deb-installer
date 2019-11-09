@@ -104,17 +104,10 @@ void DebListModel::installAll()
 
 void DebListModel::installPackage(const QModelIndex &index)
 {
-    Backend *b = m_backendFuture.result();
+//    Backend *b = m_backendFuture.result();
 }
 
 void DebListModel::appendPackage(DebFile *package)
 {
     m_preparedPackages.append(package);
-
-    // test
-//    Backend *b = m_backendFuture.result();
-//    Package *p = b->package(package->packageName());
-
-    // 以下包含可可能复现未知问题,可能出于control规范
-//    qDebug() << p->installedVersion();
 }

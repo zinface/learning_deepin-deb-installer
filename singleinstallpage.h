@@ -7,27 +7,27 @@
 #include <QApt/Backend>
 #include <QPushButton>
 
+class DebListModel;
 class SingleInstallPage : public QWidget
 {
     Q_OBJECT
 public:
-    explicit SingleInstallPage(QWidget *parent = nullptr);
-
-    void setPackage(QApt::DebFile *package);
+    explicit SingleInstallPage(DebListModel *model, QWidget *parent = nullptr);
 
 private slots:
     void install();
-    void onTransactionStatusChanged(const QApt::TransactionStatus status);
+    void appendOuputInfo(const QString &output);
 
 private:
+    void setPackageInfo();
+
+private:
+    DebListModel *m_packagesModel;
     QLabel *m_packageIcon;
     QLabel *m_packageName;
     QLabel *m_packageVersion;
     QLabel *m_packageDescription;
     QPushButton *m_installButton;
-
-    QApt::DebFile *m_debFile;
-    QApt::Backend *m_aptBackend;
 };
 
 #endif // SINGLEINSTALLPAGE_H
