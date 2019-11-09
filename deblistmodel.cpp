@@ -1,10 +1,16 @@
 #include "deblistmodel.h"
 
 #include <QApt/DebFile>
+#include <QApt/Backend>
+
+#include <QSize>
 
 using QApt::DebFile;
+using QApt::Backend;
 
-DebListModel::DebListModel(QObject *parent) : QAbstractListModel(parent)
+DebListModel::DebListModel(QObject *parent)
+    : QAbstractListModel(parent),
+    m_aptBackend(new Backend(this))
 {
 
 }
@@ -35,6 +41,8 @@ QVariant DebListModel::data(const QModelIndex &index, int role) const
         return package->version();
     case PackageDescriptionRole:
         return package->shortDescription();
+    case Qt::SizeHintRole:
+        return QSize(0, 60);
     default:;
     }
 
