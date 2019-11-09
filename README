@@ -13,7 +13,7 @@ README文件从【第16个提交】后一直存在
 
 
 开发过程记录：
-第一个提交的时候：
+第一个提交的时候： firt commit
     因之前对CMake做过大量学习及了解，Qt程序预创建没有任何问题。
     原项目是先创建的Qt项目配置文件pro，而该项目内完全不使用任何Qt项目的配置
     创建了:
@@ -22,7 +22,7 @@ README文件从【第16个提交】后一直存在
         debinstaller.h/cpp 作为程序的载体主界面文件
         filechoosewidget.h/cpp 唯一一个可支持拖进文件的控件，实现文件名检测逻辑
 
-第二个提交的时候：
+第二个提交的时候：add background image
     因原作者添加了背景图，是一张 lim 包子=馒头，馅=0。
     该背景图为 filechoosewidget.cpp 内饰背景图
     【原项目从Qt(pro配置)转变成CMakeLists.txt配置】
@@ -35,7 +35,7 @@ README文件从【第16个提交】后一直存在
         resources/images/img.jpg 背景图
         resources/resources.qrc   Qt 资源文件配置
 
-第三个提交的时候：
+第三个提交的时候：add dtk & change app show central in screen
     修改了一些配置项，对于 CMakeLists.txt 来说这个问题是无解。
     在这里的一个signals当时并不知道有什么用，但之后的几个提交内有重要作用
     改动了：
@@ -43,7 +43,7 @@ README文件从【第16个提交】后一直存在
         filechoosewidget.h/cpp 对文件检测逻辑进行优化，创建了一个signals触发选择的方法。
 
 
-第四个提交的时候：
+第四个提交的时候：resolv deb file to get package infomation. 解析deb文件以获取软件包信息
     这里使用了触发机制的槽信号是一个跨源文件的一个绑定，是个令人摸不着头脑的开始。
     但很快，并对这个逻辑有了初步的了解。这是个有趣的项目，所做事情明确，提交合理正确。
     使用命令dpkg-deb解析deb文件,截取标准输出结果及打印。为了验证前面所做的功能。
@@ -60,7 +60,7 @@ README文件从【第16个提交】后一直存在
     创建了：
         singleinstallpage.h/cpp 仅添加了该类，还未实现单面安装界面的逻辑。
 
-第五个提交的时候：
+第五个提交的时候：add file choose dialog & fix 解析deb文件以获取软件包信息
     这里我对第四个提交的时候出现的错误进行了调整，因开发时的问题，并没有太过认真检测而遗留。
 
     改动了：
@@ -71,7 +71,7 @@ README文件从【第16个提交】后一直存在
 
         debpackage.cpp 修正低级错误问题。
 
-第六个提交的时候：
+第六个提交的时候：add DebListModel to save preared packages. 添加DebListModel以保存先前的软件包信息
     对本地git仓库管理时出现build目录也被提交，我立即撤销提交，并在可以保存修改文件时操作
     git reset <上一个commit>  即返回上一个提交且不撤销当前更改。
     在这个时候前已经创建了一个.gitignore，因在【第7个提交】是切换分支到【第4个提交】时的commit
@@ -85,12 +85,13 @@ README文件从【第16个提交】后一直存在
 
     创建了：
         deblistmodel.h/cpp 该类为软件包信息数据模型类，继承于QAbstractListModel，并实现
-                           rowCount,data 两个虚方法。通常情况这两个方法必须实现。顶替了
-                           debinstaller.h/cpp下的 QList<DebPackage *> m_preparedPackages 集合，
-                           重点在于包信息数据的处理。
+                           rowCount,data 两个虚方法。通常情况这两个方法必须实现。
+                           顶替了 debinstaller.h/cpp 下的
+                           QList<DebPackage *> m_preparedPackages 集合，
+                           逻辑重点在于包信息数据的处理。
         debinstallworker.h/cpp 该提交仅创建了该类，预为下一步做铺垫。
 
-第七个提交的时候：
+第七个提交的时候：add singal app install widget. fix 一些 package infomation 部分
     本提交是切换到【第4个提交】时的commit
     因在【第5个提交】时修复了一些代码上的低级错误，所以这个提交是验证错误修复后的的提交
     在完成本次修改后，可正常在控制台输出Deb包的解析逻辑信息，正常打印。
@@ -101,12 +102,81 @@ README文件从【第16个提交】后一直存在
         singleinstallpage.h/cpp 在原基础上的单页安装界面仅添加了小部分控件(包信息)成员
 
 
-第八个提交的时候：
+第八个提交的时候：Merge branch ac05479. 合并分支 ac05479
     本次提交为合并【第6(master)、7(HEAD)提交】因分支不同，提交不同而进行合并
     以【第7个提交】为参考：
         合并了debinstall.cpp
         合并了singleinstall.h/cpp
         debpackage.cpp 因重复修改相同，提交时提交冲突，仅先将冲突部分删除再重新提交。
 
-第九个提交的时候：
-    做了重大变更。
+第九个提交的时候：using libqapt to resolv package infomation. 使用libqapt解析软件包信息。
+    本次提交使用了libqapt开发包进行软件包解析。
+
+    改动了：
+        CMakeLists.txt 增加了find_package(QApt REQUIRED)，并且链接时增加了QApt的头文件路径
+                       及库路径，此处有很些问题会在几个提交之后解决。
+        debinstaller.h/cpp 移除了debpackage.h引用，并使用了QApt::DebFile代替DebPackage。
+        deblistmodel.h/cpp 同样移除了debpackage.h引用，并使用QApt::DebFile代替DebPackage。
+                           此处删除的部分就含有DebPackage的deb解析函数调用。使用DebFile代替。
+
+    删除了：
+        debpackage.h/cpp 该源文件原本是提供低级的deb解析，因使用libqapt代替所以直接废除。
+
+第十个提交的时候：singal page add package infomation. 单页添加包信息显示
+    在【第7个提交】时创建的singleinstallpage.h/cpp在此处增加了大量代码。
+    很多内容是增加了布局以及排列调整，是一个重要的关于布局内容的部分。
+
+    改动了：
+        CMakeLists.txt 该文件更改无关紧要,但在链接QApt时出现小问题，将${QApt_LIBRARIES}换成QApt
+        debinstaller.cpp 该部分为主程序界面进行大小调整，并在可触发添加包信息时进行展示另一界面。
+        main.cpp 该部分更改仅仅是菜单项关于部分。在此可提供了解菜单项关于部分的信息添加。
+
+        singleinstallpage.h/cpp 本次提交添加了大量内容，但有很多布局的低级错误之处。
+                                添加了很多QLabel控件，用于进行排版时信息展示使用。
+                                添加了几种布局控件，用于进行排版时进行组合QLabel。
+
+                                增加了一个setPackage方法为初始化包信息展示时使用。
+                                该方法在debinstaller.cpp中进行触发添加包时前的调用。
+
+第十一个提交的时候：using DMainWindow[old:DWindow] insteadof QWidgets as main Windows.
+                 使用DMainWindow 代替 main Windows.
+    其实该操作部分处于失误，因旧版DTK中的 DWindow 在新版 DTK 中是不存在的。新版DTK中仅有一个
+    DMainWindow。因初次使用而造成一个程序打开时出现两个界面的问题。
+
+    改动了：
+        CMakeLists.txt 在为QApt进行导入测试，花了大部分时间。
+        debinstaller.h/cpp 将继承QWidget属性的DebInstaller界面变成DMainWindow的属性。
+                           并增加界面标题。
+        deblistmodel.h/cpp 又切换了QApt::DebFile引用的头文件，大部分时间花在这。
+                           简单修改了一些访问方法关键字，未知作用。
+        filechoosewidget.h/cpp 在这里将文件选择的按钮换成了DTK内的按钮，很有趣。
+                               并可能的设置了布局边距。
+        main.cpp 将QApplication换成了DApplication，并且DApplication可以设置主题。
+                 将主题一设置就变成自带软件包管理器一样的显示效果。
+        singleinstallpage.h/cpp 此处添加了一个按钮，用于 install 的触发。
+                                触发内部也增加了触发打印安装时的 log 。
+                                同等含初始化时的 QApt::DebFile 与 QApt::Backend 成员(未了解)
+
+第十二个提交的时候：adjust ui detail.
+    本次提交增加了新的主窗口图标，并相应去除了部分原背景设置代码。
+
+    改动了：
+        CMakeLists.txt 一些 QApt 的链接配置
+        debinstaller.cpp 增加窗口图标(左上角)
+        filechoosewidget.h/cpp 新增 QLabel 作为图标的控件，添加了拖放文件标示的字眼
+                               新增了一个布局用来设置前两个控件的排列。
+                               去掉 paintEvent 事件中的绘制原背景图代码。
+        resources/resources.qrc 添加了一个资源文件配置
+    新增了:
+        resources/images/icon.png 一个图标文件
+
+第十三个提交的时候：add command line arguments. 添加命令行参数处理。
+    本提交新增了一些可能会引起异常的过滤逻辑，和有趣的命令行参数处理调用等。
+
+    改动了：
+        CMakeLists.txt 还是原来的 QApt 依赖配置，仅仅是测试切换一些变量
+        debinstaller.cpp 增加了多个文件拖放时的验证处理，过滤可能会影响程序的异常部分。
+        main.cpp 增加了命令行参数处理，这里有一些情况下没有用过Qt类，是一个有趣的部分。
+                 一般情况下的运行打印都已经被Qt封装好了。还有一个类似反射的过程调用。
+
+待增加。。
