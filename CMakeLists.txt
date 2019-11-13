@@ -17,7 +17,8 @@ set(CMAKE_CXX_FLAGS -Wall)
 #endif()
 
 # sources file
-file(GLOB SOURCES "*.h" "*.cpp")
+source_group(HEADERS FILES "*.h")
+file(GLOB SOURCES "*.cpp" ${HEADERS})
 
 # Find the library
 #find_package(Qt5Widgets)
