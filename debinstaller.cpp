@@ -1,5 +1,4 @@
 #include "debinstaller.h"
-#include "debinstallworker.h"
 #include "deblistmodel.h"
 #include "singleinstallpage.h"
 #include "multipleinstallpage.h"
@@ -19,7 +18,6 @@ DebInstaller::DebInstaller(QWidget *parent)
     : QWidget(parent),
       m_centralLayout(new QStackedLayout),
       m_fileChooseWidget(new FileChooseWidget),
-      m_installWorker(new DebInstallWorker(this)),
       m_fileListModel(new DebListModel(this))
 {
     m_centralLayout->addWidget(m_fileChooseWidget);
