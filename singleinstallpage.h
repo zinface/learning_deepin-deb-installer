@@ -16,7 +16,6 @@ public:
 
 private slots:
     void install();
-    void appendOuputInfo(const QString &output);
 
 private:
     void setPackageInfo();

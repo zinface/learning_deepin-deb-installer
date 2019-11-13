@@ -5,15 +5,16 @@
 #include <QPushButton>
 
 class PackageListView;
-class QAbstractListModel;
+class DebListModel;
 class MultipleInstallPage : public QWidget
 {
     Q_OBJECT
 public:
-    explicit MultipleInstallPage(QAbstractListModel *model, QWidget *parent = nullptr);
+    explicit MultipleInstallPage(DebListModel *model, QWidget *parent = nullptr);
 
 
 private:
+    DebListModel *m_debListModel;
     PackageListView *m_appsView;
     QPushButton *m_installButton;
 };

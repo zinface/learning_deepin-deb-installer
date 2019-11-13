@@ -30,6 +30,7 @@ DebInstaller::DebInstaller(QWidget *parent)
     move(qApp->primaryScreen()->geometry().center() - geometry().center());
 
     connect(m_fileChooseWidget, &FileChooseWidget::packagesSelected, this, &DebInstaller::onPackagesSelected);
+    connect(m_fileListModel, &DebListModel::appendOutputInfo, this, &DebInstaller::onOutputPrinted);
 }
 
 DebInstaller::~DebInstaller()
@@ -83,4 +84,9 @@ void DebInstaller::onPackagesSelected(const QStringList &packages)
 
     // switch to new page
     m_centralLayout->setCurrentIndex(1);
+}
+
+void DebInstaller::onOutputPrinted(const QString &output) const
+{
+    qDebug() << output;
 }

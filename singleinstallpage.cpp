@@ -77,7 +77,7 @@ SingleInstallPage::SingleInstallPage(DebListModel *model, QWidget *parent)
     setLayout(centralLayout);
 
     connect(m_installButton, &QPushButton::clicked, this, &SingleInstallPage::install);
-    connect(m_packagesModel, &DebListModel::appendOutputInfo, this, &SingleInstallPage::appendOuputInfo);
+
     QTimer::singleShot(1, this, &SingleInstallPage::setPackageInfo);
 }
 
@@ -93,11 +93,6 @@ void SingleInstallPage::install()
 //    connect(transaction, &Transaction::statusDetailsChanged, this, [this](const QString &str) { qDebug() << str; });
 
 //    transaction->run();
-}
-
-void SingleInstallPage::appendOuputInfo(const QString &output)
-{
-    qDebug() << output;
 }
 
 void SingleInstallPage::setPackageInfo()
