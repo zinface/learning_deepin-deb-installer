@@ -9,12 +9,12 @@
 #include <QApt/Backend>
 #include <QApt/Transaction>
 
+class PackagesManager;
 class DebListModel : public QAbstractListModel
 {
     Q_OBJECT
 public:
     explicit DebListModel(QObject *parent = 0);
-    ~DebListModel();
 
     enum InstallerStatus
     {
@@ -30,6 +30,7 @@ public:
         PackageVersionRole,
         PackagePathRole,
         PackageDescriptionRole,
+        PackageVersionStatusRole
     };
 
     enum PackageinstallStatus
@@ -55,9 +56,7 @@ public:
         Failed
     };
 
-    const QList<QApt::DebFile *> preparedPackages() const { return m_preparedPackages; }
-
-    int packageInstallStatus(const QModelIndex &index);
+    const QList<QApt::DebFile *> preparedPackages() const;
 
     // QAbstractItemModel interface
     int rowCount(const QModelIndex &parent) const override;
@@ -76,15 +75,16 @@ public slots:
 
 private:
     void installNextDeb();
+    void fetchPackageInstallStatus(const QModelIndex &index);
 
 private:
     int m_installerStatus;
+
+    PackagesManager *m_packagesManager;
+
     QList<QApt::DebFile *>::iterator m_oplter;
     QPointer<QApt::Transaction> m_currentTransaction;
-    QFuture<QApt::Backend *> m_backendFuture;
-    QList<QApt::DebFile *> m_preparedPackages;
-    QHash<int, int> m_packageInstallStatus;
-    QHash<int, int> m_packageDependsStatus;
+
 };
 
 #endif // DEBLISTMODEL_H

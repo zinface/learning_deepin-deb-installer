@@ -1,4 +1,5 @@
 #include "deblistmodel.h"
+#include "packagesmanager.h"
 
 #include <QApt/DebFile>
 #include <QApt/Backend>
@@ -11,75 +12,29 @@
 
 using namespace QApt;
 
-Backend *init_backend()
-{
-    Backend *b = new Backend;
-    if(b->init()){
-        return b;
-    }
-
-    qFatal("%s", b->initErrorMessage().toStdString().c_str());
-    return nullptr;
-}
-
 DebListModel::DebListModel(QObject *parent)
     : QAbstractListModel(parent),
-      m_installerStatus(InstallerPrepare)
+      m_installerStatus(InstallerPrepare),
+      m_packagesManager(new PackagesManager(this))
 {
-    m_backendFuture = QtConcurrent::run(init_backend);
+
 }
 
-DebListModel::~DebListModel()
+const QList<DebFile *> DebListModel::preparedPackages() const
 {
-    m_backendFuture.result()->deleteLater();
-
-    qDeleteAll(m_preparedPackages);
-}
-
-int DebListModel::packageInstallStatus(const QModelIndex &index)
-{
-    const int r = index.row();
-
-    if(m_packageInstallStatus.contains(r))
-        return m_packageInstallStatus[r];
-
-    const QString packageName = m_preparedPackages[r]->packageName();
-    Backend *b = m_backendFuture.result();
-    Package *p = b->package(packageName);
-
-    const QString installVersion = p->installedVersion();
-    if(installVersion.isEmpty())
-    {
-        m_packageDependsStatus.insert(r, NotInstalled);
-        return NotInstalled;
-    }
-
-    const QString packageVersion = m_preparedPackages[r]->version();
-    const int result = Package::compareVersion(packageVersion, installVersion);
-
-    int ret;
-    if(result == 0)
-        ret = InstalledSameVersion;
-    else if(result > 0)
-        ret = InstalledLaterVerision;
-    else
-        ret = InstalledEarlierVersion;
-
-    m_packageInstallStatus.insert(r, ret);
-    return ret;
+    return m_packagesManager->m_preparedPackages;
 }
 
 int DebListModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
-
-    return m_preparedPackages.size();
+    return m_packagesManager->m_preparedPackages.size();
 }
 
 QVariant DebListModel::data(const QModelIndex &index, int role) const
 {
     const int r = index.row();
-    const DebFile *package = m_preparedPackages[r];
+    const DebFile *package = m_packagesManager->m_preparedPackages[r];
 
     switch (role) {
     case PackageNameRole:
@@ -103,7 +58,7 @@ void DebListModel::installAll()
     Q_ASSERT_X(m_installerStatus == InstallerPrepare, Q_FUNC_INFO, "installer status error");
 
     m_installerStatus = InstallerInstalling;
-    m_oplter = m_preparedPackages.begin();
+    m_oplter = m_packagesManager->m_preparedPackages.begin();
 
     //start first
     installNextDeb();
@@ -113,7 +68,7 @@ void DebListModel::appendPackage(DebFile *package)
 {
     Q_ASSERT_X(m_installerStatus == InstallerInstalling, Q_FUNC_INFO, "installer status error");
 
-    m_preparedPackages.append(package);
+    m_packagesManager->m_preparedPackages.append(package);
 }
 
 void DebListModel::installNextDeb()
@@ -121,7 +76,7 @@ void DebListModel::installNextDeb()
     Q_ASSERT_X(m_installerStatus == InstallerInstalling, Q_FUNC_INFO, "installer status error");
 
     // install finished
-    if(m_oplter == m_preparedPackages.end())
+    if(m_oplter == m_packagesManager->m_preparedPackages.end())
     {
         qDebug() << "congraulations, install finished !!!";
 
@@ -134,7 +89,7 @@ void DebListModel::installNextDeb()
     DebFile *deb = *m_oplter++;
     qDebug() << Q_FUNC_INFO << "starting to install package." << deb->packageName();
 
-    m_currentTransaction = m_backendFuture.result()->installFile(*deb);
+    m_currentTransaction = m_packagesManager->m_backendFuture.result()->installFile(*deb);
     Transaction *trans = m_currentTransaction.data();
 
     connect(trans, &Transaction::statusDetailsChanged, this, &DebListModel::appendOutputInfo);
@@ -142,4 +97,9 @@ void DebListModel::installNextDeb()
     connect(trans,&Transaction::finished, trans, &Transaction::deleteLater);
 
     trans->run();
+}
+
+void DebListModel::fetchPackageInstallStatus(const QModelIndex &index)
+{
+
 }
